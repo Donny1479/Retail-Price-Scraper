@@ -326,6 +326,10 @@ data["retailer"] = data["retailer"].fillna(data["retailer_id"])
 data["brand_group"] = data["brand_group"].fillna("Unmapped")
 data["availability"] = data["availability"].fillna("unclear").replace("", "unclear")
 data["url_status"] = data["url_status"].fillna("unclear").replace("", "unclear")
+if "notes_x" in data.columns:
+    data["notes"] = data["notes_x"].fillna("")
+elif "notes" not in data.columns:
+    data["notes"] = ""
 data = add_price_per_unit(data)
 
 st.title("Tim Hortons CPG Price Tracker")
@@ -415,7 +419,6 @@ with tab_price:
                 "url_status",
                 "availability",
                 "seller",
-                "confidence",
                 "product_url",
                 "notes",
             ],
@@ -536,6 +539,10 @@ with tab_urls:
         st.info("The reusable product URL cache is ready. The first scrape should populate `data/product_urls.csv`.")
     else:
         url_view = product_urls.merge(products, on="product_id", how="left").merge(retailers, on="retailer_id", how="left")
+        if "notes_x" in url_view.columns:
+            url_view["notes"] = url_view["notes_x"].fillna("")
+        elif "notes" not in url_view.columns:
+            url_view["notes"] = ""
         if selected_segments:
             url_view = url_view[url_view["segment"].isin(selected_segments)]
         if selected_retailers:
