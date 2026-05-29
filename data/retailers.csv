@@ -1,0 +1,13 @@
+retailer_id,retailer,banner_group,province,market,postal_code,location_note,seller_rule
+walmart,Walmart,Walmart,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold and shipped by Walmart; exclude marketplace sellers.
+rcss,Real Canadian Superstore,Loblaw,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Real Canadian Superstore or Loblaw retail banner.
+sobeys,Sobeys,Empire,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Sobeys retail banner.
+loblaws,Loblaws,Loblaw,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Loblaws retail banner.
+metro_on,Metro ON,Metro,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Metro Ontario retail banner.
+canadian_tire,Canadian Tire,Canadian Tire,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Canadian Tire; exclude marketplace or partner sellers.
+food_basics,Food Basics,Metro,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by Food Basics retail banner.
+freshco,FreshCo,Empire,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by FreshCo retail banner.
+no_frills,No Frills,Loblaw,ON,Whitby,L1R0P3,Use Whitby postal code for store or delivery context.,Must be sold by No Frills or Loblaw retail banner.
+amazon_ca,Amazon.ca,Amazon,National,Canada,L1R0P3,Use Canadian Amazon results; seller can vary but must be captured.,Amazon is the exception to the retailer-sold rule; record seller and fulfillment.
+iga_qc,IGA QC,Sobeys,QC,Montreal,H3B1A1,Use a generic Montreal postal code for Quebec reads.,Must be sold by IGA Quebec retail banner.
+metro_qc,Metro QC,Metro,QC,Montreal,H3B1A1,Use a generic Montreal postal code for Quebec reads.,Must be sold by Metro Quebec retail banner.

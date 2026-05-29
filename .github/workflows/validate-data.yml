@@ -1,0 +1,31 @@
+name: Validate weekly scrape data
+
+on:
+  pull_request:
+    paths:
+      - "data/**"
+      - "scripts/validate_scrape_file.py"
+  push:
+    paths:
+      - "data/**"
+      - "scripts/validate_scrape_file.py"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate CSV files
+        shell: bash
+        run: |
+          python scripts/validate_url_cache.py data/product_urls.csv
+          shopt -s nullglob
+          files=(data/scrapes/*.csv)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No weekly scrape CSV files to validate."
+            exit 0
+          fi
+          python scripts/validate_scrape_file.py "${files[@]}"
