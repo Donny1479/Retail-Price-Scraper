@@ -333,11 +333,9 @@ elif "notes" not in data.columns:
 data = add_price_per_unit(data)
 
 st.title("Tim Hortons CPG Price Tracker")
-st.caption("Weekly Canadian retail reads for Tim Hortons CPG products and tracked competitive items.")
 
 with st.sidebar:
     st.header("Filters")
-    st.caption("Weekly data loads automatically from CSV files committed to `data/scrapes/`.")
     week_options = sorted([w for w in data["week_start"].dropna().unique() if w], reverse=True)
     selected_weeks = st.multiselect("Week", week_options, default=week_options[:1])
     segment_options = sorted(products["segment"].dropna().unique())
@@ -374,9 +372,6 @@ metric_cols[2].metric("Retailers seen", f"{priced['retailer_id'].nunique():,}")
 metric_cols[3].metric("Average retail", format_money(priced["effective_retail"].mean()) if not priced.empty else "")
 unpriced_count = int(filtered["effective_retail"].isna().sum()) if "effective_retail" in filtered else 0
 metric_cols[4].metric("Unpriced / gaps", f"{unpriced_count:,}")
-
-if scrapes.empty:
-    st.info("No weekly scrape files are present yet. The product and retailer trackers are ready for the first CSV drop.")
 
 tab_price, tab_retailer, tab_trends, tab_coverage, tab_urls, tab_master = st.tabs(
     ["Price Board", "Retailer View", "Trends", "Coverage", "URL Cache", "Product Master"]
@@ -469,9 +464,7 @@ with tab_retailer:
 
 with tab_trends:
     st.subheader("Trends")
-    if priced.empty or priced["week_start"].nunique() < 2:
-        st.info("Trend charts appear after at least two weekly files have priced observations.")
-    else:
+    if not priced.empty and priced["week_start"].nunique() >= 2:
         trend_product_options = sorted(priced["item_description"].dropna().unique())
         trend_product = st.selectbox("Trend product", trend_product_options)
         trend = priced[priced["item_description"].eq(trend_product)]
@@ -508,9 +501,7 @@ with tab_coverage:
 
     coverage = filtered.copy()
     coverage["has_price"] = coverage["effective_retail"].notna()
-    if coverage.empty:
-        st.info("Coverage will populate when scrape rows are present.")
-    else:
+    if not coverage.empty:
         coverage["coverage_status"] = coverage.apply(display_status, axis=1)
         coverage_matrix = coverage.pivot_table(
             index=["segment", "item_description"],
@@ -528,16 +519,9 @@ with tab_coverage:
             st.subheader("Unpriced, Not Found, or Not Listed")
             st.dataframe(missing_view, use_container_width=True, hide_index=True)
 
-    st.markdown('<p class="small-note">Tracked scope: '
-                f'{base_products["product_id"].nunique()} products across '
-                f'{selected_retailer_ids["retailer_id"].nunique()} retailers.</p>',
-                unsafe_allow_html=True)
-
 with tab_urls:
     st.subheader("URL Cache")
-    if product_urls.empty:
-        st.info("The reusable product URL cache is ready. The first scrape should populate `data/product_urls.csv`.")
-    else:
+    if not product_urls.empty:
         url_view = product_urls.merge(products, on="product_id", how="left").merge(retailers, on="retailer_id", how="left")
         if "notes_x" in url_view.columns:
             url_view["notes"] = url_view["notes_x"].fillna("")
